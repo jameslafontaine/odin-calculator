@@ -19,6 +19,9 @@ function divide(num1, num2) {
 let numberOne = 0;
 let numberTwo = 0;
 let operator = '';
+let currDisplay = '';
+
+const display = document.querySelector("#display")
 
 function operate(op, num1, num2) {
     switch (op) {
@@ -35,3 +38,17 @@ function operate(op, num1, num2) {
             return "ERROR"
     }
 }
+
+function setupButtonEventHandlers() {
+    digitButtons = document.querySelectorAll(".digit");
+
+    digitButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            display.innerHTML += button.innerHTML;
+            currDisplay += button.innerHTML;
+            //console.log(`currDisplay = ${currDisplay}`)
+        });
+    });
+}
+
+setupButtonEventHandlers();
