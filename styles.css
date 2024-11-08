@@ -42,6 +42,7 @@ body {
     background-image: radial-gradient(#072138, #a63ed3);
     border: 2px solid black;
     color: white;
+    border-radius: 10px;
 }
 
 .blank {
