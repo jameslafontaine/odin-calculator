@@ -12,6 +12,9 @@ function multiply(num1, num2) {
 }
 
 function divide(num1, num2) {
+    if (num2 == 0) {
+        alert("Why are you trying to break the calculator? ;)")
+    }
     return num1 / num2
 }
 
@@ -21,10 +24,19 @@ let numberTwo = "";
 let operator = '';
 let operatorBuffer = '';
 let currDisplay = '';
+justCalculated = false;
+
+const MAX_DIGITS = 14;
+const SIX_DECIMAL_PLACES = 1000000;
+
 
 const display = document.querySelector("#display")
 
+
+
 function operate(op, num1, num2) {
+
+    // console.log(`op = ${op}, num1 = ${num1}, num2 = ${num2}`)
 
     switch (op) {
         case '+':
@@ -48,8 +60,7 @@ function setupButtonEventHandlers() {
 
     digitButtons.forEach(button => {
         button.addEventListener("click", () => {
-            updateDisplay(button.innerHTML)
-            //console.log(`currDisplay = ${currDisplay}`)
+            handleDigitInput(button.innerHTML)
         });
     });
 
@@ -57,14 +68,17 @@ function setupButtonEventHandlers() {
     const equalsButton = document.querySelector("#btn-equals")
 
     equalsButton.addEventListener("click", () => {
-        numberTwo = Number(currDisplay)
-        clearDisplay()
-        let result = operate(operator, numberOne, numberTwo)
-        updateDisplay(result)
-        currDisplay = ""
-        clearData();
-        numberOne = result
-        numberTwo = null
+        // don't do anything if the equals button is pressed when
+        // the display is empty or an operator hasn't been specified 
+        if (!operator) {
+            return
+        }
+
+        if (currDisplay && operator) {
+            numberTwo = Number(currDisplay)
+            processCalculation();
+        }
+
     })
 
     // AC button
@@ -90,39 +104,81 @@ function setupButtonEventHandlers() {
     });
 }
 
+function handleDigitInput(digit) {
+    // console.log(`### handleDigitInput(${digit}) ###`)
+    // console.log(`justCalculated = ${justCalculated}`)
+    // console.log(`operator = ${operator}`)
+    if (justCalculated) {
+        if (operator) {
+            // user wants to chain a calculation using the previous result
+            clearDisplay()
+            updateDisplay(digit)
+            numberTwo = Number(digit)
+        } else {
+            // user wants to input a new pair of numbers so clear everything
+            justCalculated = false;
+            clearDisplay()
+            clearData()
+            updateDisplay(digit)
+        }
+
+    } else {
+        // user is simply entering a number 
+        updateDisplay(digit)
+    }
+}
+
+
+
 function handleOperatorInput(op) {
 
-    console.log(op)
+    // console.log(op)
+
+    // Check if the user is continuing a calculation with a previous result
+    // because if they are then we need to set this flag to false for
+    // numberTwo to be recorded correctly
+    if (justCalculated) {
+        justCalculated = false;
+    }
 
     op == "btn-add" ? op = '+' :
         op == "btn-subtract" ? op = '-' :
             op == "btn-multiply" ? op = '*' :
                 op == "btn-divide" ? op = '/' :
-                    op == ''
+                    op == ""
 
     // if the user has already provided an operator, perform a calculation
     // while buffering this operator for the next calculation
     if (operator) {
         operatorBuffer = op;
-        clearDisplay()
-        let result = operate(operator, numberOne, numberTwo)
-        numberOne = result
-        numberTwo = null
-        operator = operatorBuffer
-        operatorBuffer = ""
-        updateDisplay(result)
-
+        numberTwo = Number(currDisplay)
+        processCalculation()
     } else {
-        // only register an operator if digits have been input
+        // otherwise we simply record the operator and have to check if 
         operator = op
         numberOne != "" ? numberTwo = Number(currDisplay) : numberOne = Number(currDisplay)
         currDisplay = ""
     }
 }
 
+function processCalculation() {
+    clearDisplay()
+    let result = operate(operator, numberOne, numberTwo)
+    numberOne = result
+    numberTwo = null
+    operator = operatorBuffer
+    operatorBuffer = ""
+    result = Math.round((result + Number.EPSILON) * SIX_DECIMAL_PLACES) / SIX_DECIMAL_PLACES
+    updateDisplay(result)
+    justCalculated = true
+}
+
 function updateDisplay(string) {
-    currDisplay += string
-    display.innerHTML = currDisplay
+    if (currDisplay.length < MAX_DIGITS) {
+        currDisplay += string
+        display.innerHTML = currDisplay
+    }
+
 }
 
 function clearDisplay() {
