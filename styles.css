@@ -13,7 +13,8 @@ body {
     width: 40vw;
     margin: 10% auto;
     padding: 30px;
-    background-image: url("imgs/calc-background.jpg")
+    background-image: url("imgs/calc-background.jpg");
+    border-radius: 15px;
 }
 
 #display {
@@ -24,6 +25,7 @@ body {
     text-align: right;
     background-color: white;
     font-family: 'Orbitron', sans-serif;
+    border-radius: 15px;
 }
 
 #buttons {
