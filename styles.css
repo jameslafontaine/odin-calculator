@@ -29,13 +29,17 @@ body {
     display: flex;
     justify-content: space-around;
     flex-wrap: wrap;
+    padding-top: 20px;
 }
 
 .btn {
+    font-family: 'Orbitron', sans-serif;
     font-size: 36px;
-    margin: 20px 0px;
     padding: 10px;
     width: 25%;
+    background-image: radial-gradient(#072138, #a63ed3);
+    border: 2px solid black;
+    color: white;
 }
 
 .blank {
