@@ -2,6 +2,10 @@
 
 A simple calculator application developed as part of The Odin Project's JavaScript Foundations section. This project demonstrates foundational JavaScript skills, along with HTML and CSS, to create an interactive calculator with basic arithmetic functions and user-friendly design.
 
+## Live Demo
+
+https://jameslafontaine.github.io/odin-calculator/
+
 ## Project Description
 
 This project is a browser-based calculator app that allows users to perform basic mathematical operations. It showcases the use of JavaScript for implementing calculation logic, DOM manipulation for handling user input, and CSS for styling the calculator interface.
